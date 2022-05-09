@@ -1,3 +1,4 @@
+import os
 from time import sleep
 
 import threading
@@ -9,8 +10,8 @@ import keyboard
 from calculator import Calculator
 from server import start_server
 from user import User
+from settings import *
 
-START_PAGE = "templates/start.html"
 
 
 def on_resized(width, height):
