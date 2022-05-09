@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 
-from  calculator import Calculator
+from calculator import Calculator
 
 
 app = Flask(__name__)
@@ -15,6 +15,7 @@ def start():
 def test():
     return "<h1>Перенаправляю на страницу теста...</h1>"
 
+
 @app.route("/statistics")
 def statistics():
     df = Calculator.read_data()
@@ -26,6 +27,7 @@ def statistics():
                            titles1=df1.columns.values,
                            tables2=[df2.to_html(classes='data', header="true")],
                            titles2=df2.columns.values)
+
 
 def start_server():
     app.run(host="0.0.0.0", port=80)
