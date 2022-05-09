@@ -1,0 +1,5 @@
+proxy-tools==0.1.0
+pyobjc-core==8.5
+pyobjc-framework-Cocoa==8.5
+pyobjc-framework-WebKit==8.5
+pywebview==3.6.3

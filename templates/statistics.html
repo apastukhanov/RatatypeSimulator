@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <title>Blank page</title>
+</head>
+<body>
+    <div id="container">
+        <div class="box">
+            <button type="button" class="btn btn-light w-100 add-top"><a href="http://0.0.0.0:80/start" class="link">
+                Перейти на стартовую страницу Ratatype Simulator!</a></button>
+        </div>
+    </div>
+    <div class="table">
+        {% for table in tables1 %}
+                {{titles1[loop.index]}}
+                {{ table|safe }}
+        {% endfor %}
+    </div>
+
+    <div class="table">
+        {% for table in tables2 %}
+                {{titles2[loop.index]}}
+                {{ table|safe }}
+        {% endfor %}
+    </div>
+
+
+
+</body>
+</html>
