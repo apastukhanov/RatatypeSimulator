@@ -8,7 +8,7 @@ import keyboard
 
 from calculator import Calculator
 from server import start_server
-
+from user import User
 
 START_PAGE = "templates/start.html"
 
@@ -19,6 +19,7 @@ def on_resized(width, height):
 
 def pass_test():
     window.load_url("https://www.ratatype.ua/typing-test/test/en/")
+    user = "robot"
     sleep(2)
     keyboard.send("ENTER")
     sleep(1)
@@ -33,18 +34,19 @@ def pass_test():
                 keyboard.write(letter)
                 sleep(0.1)
         except Exception as e:
-            pass
+            print(str(e))
 
 
-def save_results(content):
+def save_results(content, user):
     speed = content[0]["innerText"]
     accuracy = content[1]["innerText"]
     lang = window.get_elements("img.img-responsive")[0]['src'].split('/')[-2]
-    print(f"{speed=}\n{accuracy=}\n{lang=}")
+    print(f"{speed=}\n{accuracy=}\n{lang=}\n{user=}")
     if speed.isnumeric():
         calc = Calculator(speed=speed,
                           accuracy=accuracy,
-                          lang=lang)
+                          lang=lang,
+                          user=user)
         calc.save_data()
         print('result is saved!')
         window.evaluate_js("alert('result is saved!')")
@@ -64,6 +66,7 @@ def save_results(content):
 
 
 def on_loaded():
+    global user
     url = window.get_current_url()
     url_arr = url.split("/")
 
@@ -71,16 +74,19 @@ def on_loaded():
 
     if "mytest" in url_arr:
         pass_test()
+        user.set_user("robot")
 
     if "start" in url_arr:
         window.load_url(START_PAGE)
+        user = User()
 
     if "complete" in url_arr:
         content = window.get_elements('span.fs-36')
-        save_results(content)
+        save_results(content, user.get_user())
 
 
 if __name__ == "__main__":
+    user = User()
     t = threading.Thread(target=start_server)
     t.daemon = True
     t.start()
