@@ -8,8 +8,8 @@ class User:
         self._user = self.get_username()
 
     def __repr__(self):
-        user = self.get_user()
-        return f"User ({user=})"
+        name = self.get_user()
+        return f"User({name=})"
 
     def set_user(self, user):
         self._user = user

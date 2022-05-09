@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 
 from calculator import Calculator
+from user import User
 
 
 app = Flask(__name__)
@@ -18,8 +19,10 @@ def test():
 
 @app.route("/statistics")
 def statistics():
+    user = User()
     df = Calculator.read_data()
-    df1 = df.sort_values(by='timestamp', ascending=False).reset_index().drop('index', axis=1).head()
+    df = df.loc[df["user"] == user.get_user()]
+    df1 = df.sort_values(by='timestamp', ascending=False).reset_index().drop('index', axis=1).head(10)
     df2 = df.groupby(by="language")[['speed', 'accuracy']].mean()
 
     return render_template('statistics.html',

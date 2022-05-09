@@ -19,7 +19,6 @@ def on_resized(width, height):
 
 def pass_test():
     window.load_url("https://www.ratatype.ua/typing-test/test/en/")
-    user = "robot"
     sleep(2)
     keyboard.send("ENTER")
     sleep(1)
