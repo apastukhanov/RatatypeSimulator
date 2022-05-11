@@ -3,6 +3,8 @@ from flask import Flask, render_template
 from calculator import Calculator
 from user import User
 
+from settings import *
+
 
 app = Flask(__name__)
 
@@ -15,6 +17,18 @@ def start():
 @app.route("/mytest")
 def test():
     return "<h1>Перенаправляю на страницу теста...</h1>"
+
+
+@app.route("/openfiledialog/<action>")
+def open_file_dialog(action):
+    if action == "import":
+        return "<h1> Импортируем данные...</h1>"
+    if action == "export":
+        return "<h1> Экспортируем данные...</h1>"
+    if action == "delete":
+        return "<h1> Удаляем данные...</h1>"
+
+
 
 
 @app.route("/statistics")

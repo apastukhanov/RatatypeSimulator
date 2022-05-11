@@ -1,17 +1,16 @@
-import os
+import os.path
 from time import sleep
 
 import threading
+import shutil
 
 import webview
 import keyboard
-
 
 from calculator import Calculator
 from server import start_server
 from user import User
 from settings import *
-
 
 
 def on_resized(width, height):
@@ -65,6 +64,12 @@ def save_results(content, user):
         """)
 
 
+def open_file_dialog(window):
+    file_types = ('Excel Files (*.csv;*.xlsx;*.xl*)', 'All files (*.*)')
+    result = window.create_file_dialog(webview.OPEN_DIALOG, allow_multiple=True, file_types=file_types)
+    print(result)
+
+
 def on_loaded():
     global user
     url = window.get_current_url()
@@ -83,6 +88,30 @@ def on_loaded():
     if "complete" in url_arr:
         content = window.get_elements('span.fs-36')
         save_results(content, user.get_user())
+
+    if 'import' in url_arr:
+        result = webview.windows[0].create_file_dialog(webview.OPEN_DIALOG, allow_multiple=False)
+        if result:
+            shutil.move(result[0], PATH_TO_DATA)
+            window.evaluate_js("alert('File is imported!')")
+        else:
+            window.evaluate_js("alert('File is not imported!')")
+        window.load_url(START_PAGE)
+    if 'export' in url_arr:
+        result = webview.windows[0].create_file_dialog(webview.SAVE_DIALOG, allow_multiple=False)
+        if result:
+            if os.path.exists(PATH_TO_DATA):
+                shutil.copy(PATH_TO_DATA, result, follow_symlinks=False)
+                window.evaluate_js("alert('File is exported!')")
+            else:
+                window.evaluate_js("alert('File does not exist!')")
+        else:
+            window.evaluate_js("alert('File is not exported!')")
+        window.load_url(START_PAGE)
+    if 'delete' in url_arr:
+        if os.path.exists(PATH_TO_DATA):
+            os.remove(PATH_TO_DATA)
+        window.load_url(START_PAGE)
 
 
 if __name__ == "__main__":
