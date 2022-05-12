@@ -3,8 +3,6 @@ from flask import Flask, render_template
 from calculator import Calculator
 from user import User
 
-from settings import *
-
 
 app = Flask(__name__)
 
@@ -29,8 +27,6 @@ def open_file_dialog(action):
         return "<h1> Удаляем данные...</h1>"
 
 
-
-
 @app.route("/statistics")
 def statistics():
     user = User()
@@ -48,4 +44,3 @@ def statistics():
 
 def start_server():
     app.run(host="0.0.0.0", port=80)
-

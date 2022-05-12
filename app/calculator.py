@@ -1,10 +1,8 @@
 from datetime import datetime
 
-import os
-
 import pandas as pd
 
-from settings import PATH_TO_DATA
+from settings import *
 
 
 class Calculator:
@@ -25,8 +23,8 @@ class Calculator:
         return f"Calculator ({speed=}, {accuracy=}, {lang=}, {user=})"
 
     def save_data(self):
-        if os.path.exists(PATH_TO_DATA):
-            df = pd.read_csv(PATH_TO_DATA)
+        if os.path.exists(PATH_TO_PICKLE):
+            df = pd.read_pickle(PATH_TO_PICKLE)
         else:
             df = pd.DataFrame(columns=self.COLS)
         df = pd.concat([df, pd.DataFrame(columns=self.COLS,
@@ -36,11 +34,27 @@ class Calculator:
                                                 "language": self.lang,
                                                 "user": self.user}])],
                        ignore_index=True)
-        df.to_csv(PATH_TO_DATA, mode='w', index=False)
+        df.to_pickle(PATH_TO_PICKLE)
 
     @classmethod
     def read_data(cls):
-        if os.path.exists(PATH_TO_DATA):
-            df = pd.read_csv(PATH_TO_DATA)
+        if os.path.exists(PATH_TO_PICKLE):
+            df = pd.read_pickle(PATH_TO_PICKLE)
             return df
         return pd.DataFrame(columns=cls.COLS)
+
+    @classmethod
+    def write_to_csv(cls, path):
+        df = cls.read_data()
+        df.to_csv(path, index=False)
+
+    @classmethod
+    def import_data_from_csv(cls, path):
+        if not path.split('.')[-1] == "csv":
+            return False
+        df = pd.read_csv(path)
+        if list(df.columns) != list(cls.COLS):
+            return False
+        df.to_pickle(PATH_TO_PICKLE)
+        return True
+

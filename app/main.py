@@ -2,7 +2,6 @@ import os.path
 from time import sleep
 
 import threading
-import shutil
 
 import webview
 import keyboard
@@ -92,25 +91,24 @@ def on_loaded():
     if 'import' in url_arr:
         result = webview.windows[0].create_file_dialog(webview.OPEN_DIALOG, allow_multiple=False)
         if result:
-            shutil.move(result[0], PATH_TO_DATA)
-            window.evaluate_js("alert('File is imported!')")
+            if Calculator.import_data_from_csv(result[0]):
+                window.evaluate_js("alert('File is imported!')")
+            else:
+                window.evaluate_js("alert('File is corrupted! \n File is not imported')")
         else:
             window.evaluate_js("alert('File is not imported!')")
         window.load_url(START_PAGE)
     if 'export' in url_arr:
         result = webview.windows[0].create_file_dialog(webview.SAVE_DIALOG, allow_multiple=False)
         if result:
-            if os.path.exists(PATH_TO_DATA):
-                shutil.copy(PATH_TO_DATA, result, follow_symlinks=False)
-                window.evaluate_js("alert('File is exported!')")
-            else:
-                window.evaluate_js("alert('File does not exist!')")
+            Calculator.write_to_csv(result)
+            window.evaluate_js("alert('File is exported!')")
         else:
             window.evaluate_js("alert('File is not exported!')")
         window.load_url(START_PAGE)
     if 'delete' in url_arr:
-        if os.path.exists(PATH_TO_DATA):
-            os.remove(PATH_TO_DATA)
+        if os.path.exists(PATH_TO_PICKLE):
+            os.remove(PATH_TO_PICKLE)
         window.load_url(START_PAGE)
 
 
