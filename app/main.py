@@ -122,4 +122,4 @@ if __name__ == "__main__":
                                    confirm_close=True,
                                    width=1023, height=600)
     window.events.loaded += on_loaded
-    webview.start(debug=True)
+    webview.start()
