@@ -1,3 +1,4 @@
+import os.path
 from datetime import datetime
 
 import pandas as pd
@@ -46,7 +47,10 @@ class Calculator:
     @classmethod
     def write_to_csv(cls, path):
         df = cls.read_data()
-        df.to_csv(path, index=False)
+        if os.path.exists(path):
+            df.to_csv(path, index=False)
+            return True
+        return False
 
     @classmethod
     def import_data_from_csv(cls, path):

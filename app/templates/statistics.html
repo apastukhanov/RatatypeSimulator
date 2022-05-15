@@ -3,30 +3,96 @@
 <head>
     <meta charset="UTF-8">
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
-    <title>Blank page</title>
+    <title>Statistics</title>
 </head>
+<style>
+    table {
+        width:100%;
+    }
+    .w-101 {
+        border:2px solid black;
+        margin-bottom: 0px;
+        padding-left: 10%;
+        padding-right: 10%;
+        text-align: center;
+        font-size: 26px;
+        color: white
+    }
+
+    th {
+        text-align: center;
+        font-size: 26px;
+    }
+
+    tr {
+        text-align: center;
+    }
+
+    #container {
+       width: 73.4%;
+        margin-left:13.3%;
+        margin-top: 2%;
+    }
+
+    .container {
+       width: 73.4%;
+        margin-left:13.3%;
+        margin-top: 2%;
+        padding: 0%;
+    }
+</style>
 <body>
-    <div id="container">
+    <div id="container" style="">
         <div class="box">
             <button type="button" class="btn btn-light w-100 add-top"><a href="http://0.0.0.0:80/start" class="link">
                 Перейти на стартовую страницу Ratatype Simulator!</a></button>
         </div>
     </div>
-    <div class="table">
-        {% for table in tables1 %}
-                {{titles1[loop.index]}}
-                {{ table|safe }}
-        {% endfor %}
+
+    <div class="col-container" style="background: cornflowerblue; width: 73.4%; margin-left:13.3%; margin-top: 2%">
+        <p class="w-101">English Language</p>
+
+        <div class="row" style="height: 350px; margin-top: 0px">
+            <div id='chart1' class='col-md-6'></div>
+            <div id='chart2' class='col-md-6'></div>
+        </div>
+        <p class="w-101">Russian Language</p>
+        <div class="row" style="height: 350px">
+            <div id='chart3' class='col-md-6'></div>
+            <div id='chart4' class='col-md-6'></div>
+        </div>
     </div>
 
-    <div class="table">
-        {% for table in tables2 %}
-                {{titles2[loop.index]}}
-                {{ table|safe }}
-        {% endfor %}
+    <div class="caption text-center" style="background:cornflowerblue; width: 73.4%; margin-left:13.3%; margin-top: 2%; margin-bottom: 0.2%">
+        <p class="w-101">Last entries</p>
     </div>
 
+    <div class="container" style="">
+        <div class="table table-hover table-dark table-bordered"  style="align-content: center">
+            {% for table in tables1 %}
+            {{ table|safe }}
+            {% endfor %}
+        </div>
+    </div>
 
+     <div class="col-container" style="background: cornflowerblue; width: 73.4%; margin-left:13.3%; margin-top: 2%">
+        <p class="w-101">Averages by Day</p>
+            <div id='chart5'></div>
+    </div>
+<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+<script type='text/javascript'>
+    var graph1 = {{graphJSON1 | safe}};
+    var graph2 = {{graphJSON2 | safe}};
+    var graph3 = {{graphJSON3 | safe}};
+    var graph4 = {{graphJSON4 | safe}};
+    var graph5 = {{graphJSON5 | safe}};
+    Plotly.plot('chart1',graph1,{});
+    Plotly.plot('chart2',graph2,{});
+    Plotly.plot('chart3',graph3,{});
+    Plotly.plot('chart4',graph4,{});
+    Plotly.plot('chart5',graph5,{});
+</script>
 
 </body>
+
 </html>
