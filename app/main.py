@@ -48,10 +48,9 @@ def save_results(content, user):
         calc.save_data()
         print('result is saved!')
         window.evaluate_js("alert('result is saved!')")
-        # window.load_url(START_PAGE)
         window.evaluate_js("""
         var tag = document.createElement("a");
-        var text = document.createTextNode("Перейти на стартовую страницу Ratatype Simulator!");
+        var text = document.createTextNode("Return to the start page of the app");
         tag.appendChild(text);
         tag.href = "http://0.0.0.0:80/start";
         var element = document.getElementsByClassName("col-xs-12 col-sm-5")[0];
