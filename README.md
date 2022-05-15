@@ -1,6 +1,6 @@
 # RatatypeSimulator
 
-This app is wrapper for the site: https://www.ratatype.com. The app is made for collecting your typing statistics: speed and accurancy percentage.
+This app is the wrapper for the site: https://www.ratatype.com. The app is made for collecting your typing statistics: typing speed and typing accuracy percentage.
 
 The app helps users to keep track of development of users' typing skills and to visualize their typing statistics.
 
