@@ -5,18 +5,18 @@ This app is wrapper for the site: https://www.ratatype.com. The app is made for 
 The main aim of the project to help users to keep track of your typing results and visualize your progress.
 
 **The App's Menu:**
-<img width="1019" alt="image" src="https://user-images.githubusercontent.com/36933268/168491334-1ea9b76e-fcb7-4428-8de3-4bec42c4f42f.png">
-
-**The main page to test your typing speed and accuracy:**
-<img width="1016" alt="image" src="https://user-images.githubusercontent.com/36933268/168491371-402a4977-7a8a-4b7e-8c83-f286046ef2fb.png">
+<img width="1135" alt="image" src="https://user-images.githubusercontent.com/36933268/168492487-296750fe-30ff-4ea3-99b2-e115c8329460.png">
 
 **The page with your statistics (Gauge Charts):**
-<img width="1489" alt="image" src="https://user-images.githubusercontent.com/36933268/168491403-0ba53d65-1e45-4fd5-ae8c-3d1b2e94e6d0.png">
+<img width="1135" alt="image" src="https://user-images.githubusercontent.com/36933268/168492528-877b0073-e12c-4bf5-937d-b785e864080f.png">
+<img width="1135" alt="image" src="https://user-images.githubusercontent.com/36933268/168492541-19b48200-aa2a-4033-adbd-8cdaa2df03eb.png">
+
 
 **The page with your statistics (the Table with the last 7 entries):**
-<img width="1492" alt="image" src="https://user-images.githubusercontent.com/36933268/168491415-ace0775c-1f1d-4fd6-b0c5-92fc8b3a50de.png">
+<img width="1135" alt="image" src="https://user-images.githubusercontent.com/36933268/168492546-658122d3-1e54-4420-b5bb-1d17b66e26a1.png">
+
 
 **The averages for every date (the Scatter plot):**
-<img width="1218" alt="image" src="https://user-images.githubusercontent.com/36933268/168492292-928c848a-ea8d-431c-862c-30cd81c0fce5.png">
+<img width="1135" alt="image" src="https://user-images.githubusercontent.com/36933268/168492554-e98b67ac-6fd2-43f8-974a-111f62d684a0.png">
 
 
