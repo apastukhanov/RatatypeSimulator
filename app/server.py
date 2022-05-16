@@ -1,8 +1,5 @@
-import json
-
 import pandas as pd
 from flask import Flask, render_template
-
 
 from calculator import Calculator
 from plotutils import *
@@ -39,38 +36,42 @@ def statistics():
     df = df.loc[df["user"] == user.get_user()]
     
     df0 = df.copy()
-    df0['timestamp'] = pd.to_datetime(df0['timestamp'], format='%Y-%m-%d %H:%M:%S.%f').dt.strftime('%d %B %Y, %H:%M')
+    df0['timestamp'] = pd.to_datetime(df0['timestamp'],
+                                      format='%Y-%m-%d %H:%M:%S.%f').dt.strftime('%d %B %Y, %H:%M')
     
     df1 = df0.sort_values(by='timestamp', ascending=False).reset_index().drop('index', axis=1).head(7)
     df2 = df0.groupby(by="language")[['speed', 'accuracy']].mean()
 
     fig1 = Gauge(name='speed', value=df2.loc['en', 'speed'],
                  delta=350, gauge=350, step1=250, step2=400, threshold=490)
-
     fig2 = Gauge(name='accuracy', value=df2.loc['en', 'accuracy'],
                  delta=94, gauge=100, step1=90, step2=100, threshold=95)
-
     fig3 = Gauge(name='speed', value=df2.loc['ru', 'speed'],
                  delta=350, gauge=500, step1=250, step2=400, threshold=490)
-
     fig4 = Gauge(name='accuracy', value=df2.loc['ru', 'accuracy'],
                  delta=94, gauge=100, step1=90, step2=100, threshold=95)
 
     df['timestamp'] = pd.to_datetime(df['timestamp'], format='%Y-%m-%d %H:%M:%S.%f')
     df['timestamp'] = df['timestamp'].dt.strftime('%d.%m.%Y')
 
-    en = df.loc[(df['language'] == 'en') & (df['user'] == user.get_user())].groupby(by=['timestamp'])[
+    en = df.loc[(df['language'] == 'en') &
+                (df['user'] == user.get_user())].groupby(by=['timestamp'])[
         ['speed', 'accuracy']].mean()
 
-    ru = df.loc[(df['language'] == 'ru') & (df['user'] == user.get_user())].groupby(by=['timestamp'])[
+    ru = df.loc[(df['language'] == 'ru') &
+                (df['user'] == user.get_user())].groupby(by=['timestamp'])[
         ['speed', 'accuracy']].mean()
 
     ln_plt = LinePlot()
 
-    ln_plt.add(LinePlotInput(x=en.index, y=en['accuracy'].values, name='accuracy EN', secondary_y=True))
-    ln_plt.add(LinePlotInput(x=en.index, y=en['speed'].values, name='speed EN', secondary_y=False))
-    ln_plt.add(LinePlotInput(x=ru.index, y=ru['accuracy'].values, name='accuracy RU', secondary_y=True))
-    ln_plt.add(LinePlotInput(x=ru.index, y=ru['speed'].values, name='speed RU', secondary_y=False))
+    ln_plt.add(LinePlotInput(x=en.index, y=en['accuracy'].values,
+                             name='accuracy EN', secondary_y=True))
+    ln_plt.add(LinePlotInput(x=en.index, y=en['speed'].values,
+                             name='speed EN', secondary_y=False))
+    ln_plt.add(LinePlotInput(x=ru.index, y=ru['accuracy'].values,
+                             name='accuracy RU', secondary_y=True))
+    ln_plt.add(LinePlotInput(x=ru.index, y=ru['speed'].values,
+                             name='speed RU', secondary_y=False))
 
     graphJSON1 = fig1.graph_json()
     graphJSON2 = fig2.graph_json()
