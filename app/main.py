@@ -50,7 +50,7 @@ def save_results(content, user):
         window.evaluate_js("alert('result is saved!')")
         window.evaluate_js("""
         var tag = document.createElement("a");
-        var text = document.createTextNode("Return to the start page of the app");
+        var text = document.createTextNode("Go to the start page");
         tag.appendChild(text);
         tag.href = "http://0.0.0.0:80/start";
         var element = document.getElementsByClassName("col-xs-12 col-sm-5")[0];

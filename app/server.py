@@ -3,12 +3,9 @@ import json
 import pandas as pd
 from flask import Flask, render_template
 
-import plotly
-
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 
 from calculator import Calculator
+from plotutils import *
 from user import User
 
 
@@ -47,57 +44,17 @@ def statistics():
     df1 = df0.sort_values(by='timestamp', ascending=False).reset_index().drop('index', axis=1).head(7)
     df2 = df0.groupby(by="language")[['speed', 'accuracy']].mean()
 
-    fig1 = go.Figure(go.Indicator(
-        domain={'x': [0, 1], 'y': [0, 1]},
-        value=df2.loc['en', 'speed'],
-        mode="gauge+number+delta",
-        title={'text': "Speed"},
-        delta={'reference': 350},
-        gauge={'axis': {'range': [None, 500]},
-               'bar': {'color': "darkblue"},
-               'steps': [
-                   {'range': [0, 250], 'color': "lightgray"},
-                   {'range': [250, 400], 'color': "gray"}],
-               'threshold': {'line': {'color': "red", 'width': 4}, 'thickness': 0.75, 'value': 490}}))
+    fig1 = Gauge(name='speed', value=df2.loc['en', 'speed'],
+                 delta=350, gauge=350, step1=250, step2=400, threshold=490)
 
-    fig2 = go.Figure(go.Indicator(
-        domain={'x': [0, 1], 'y': [0, 1]},
-        value=df2.loc['en', 'accuracy'],
-        mode="gauge+number+delta",
-        title={'text': "Accuracy"},
-        delta={'reference': 94},
-        gauge={'axis': {'range': [None, 100]},
-               'bar': {'color': "darkblue"},
-               'steps': [
-                   {'range': [0, 90], 'color': "lightgray"},
-                   {'range': [90, 100], 'color': "gray"}],
-               'threshold': {'line': {'color': "red", 'width': 4}, 'thickness': 0.75, 'value': 95}}))
+    fig2 = Gauge(name='accuracy', value=df2.loc['en', 'accuracy'],
+                 delta=94, gauge=100, step1=90, step2=100, threshold=95)
 
-    fig3 = go.Figure(go.Indicator(
-        domain={'x': [0, 1], 'y': [0, 1]},
-        value=df2.loc['ru', 'speed'],
-        mode="gauge+number+delta",
-        title={'text': "Speed"},
-        delta={'reference': 350},
-        gauge={'axis': {'range': [None, 500]},
-               'bar': {'color': "darkblue"},
-               'steps': [
-                   {'range': [0, 250], 'color': "lightgray"},
-                   {'range': [250, 400], 'color': "gray"}],
-               'threshold': {'line': {'color': "red", 'width': 4}, 'thickness': 0.75, 'value': 490}}))
+    fig3 = Gauge(name='speed', value=df2.loc['ru', 'speed'],
+                 delta=350, gauge=500, step1=250, step2=400, threshold=490)
 
-    fig4 = go.Figure(go.Indicator(
-        domain={'x': [0, 1], 'y': [0, 1]},
-        value=df2.loc['ru', 'accuracy'],
-        mode="gauge+number+delta",
-        title={'text': "Accuracy"},
-        delta={'reference': 94},
-        gauge={'axis': {'range': [None, 100]},
-               'bar': {'color': "darkblue"},
-               'steps': [
-                   {'range': [0, 90], 'color': "lightgray"},
-                   {'range': [90, 100], 'color': "gray"}],
-               'threshold': {'line': {'color': "red", 'width': 4}, 'thickness': 0.75, 'value': 95}}))
+    fig4 = Gauge(name='accuracy', value=df2.loc['ru', 'accuracy'],
+                 delta=94, gauge=100, step1=90, step2=100, threshold=95)
 
     df['timestamp'] = pd.to_datetime(df['timestamp'], format='%Y-%m-%d %H:%M:%S.%f')
     df['timestamp'] = df['timestamp'].dt.strftime('%d.%m.%Y')
@@ -108,41 +65,18 @@ def statistics():
     ru = df.loc[(df['language'] == 'ru') & (df['user'] == user.get_user())].groupby(by=['timestamp'])[
         ['speed', 'accuracy']].mean()
 
-    fig = make_subplots(specs=[[{"secondary_y": True}]])
+    ln_plt = LinePlot()
 
-    fig.add_trace(go.Scatter(
-        x=en.index,
-        y=en['accuracy'].values,
-        mode="lines",
-        name="accuracy EN"
-    ), secondary_y=True)
+    ln_plt.add(LinePlotInput(x=en.index, y=en['accuracy'].values, name='accuracy EN', secondary_y=True))
+    ln_plt.add(LinePlotInput(x=en.index, y=en['speed'].values, name='speed EN', secondary_y=False))
+    ln_plt.add(LinePlotInput(x=ru.index, y=ru['accuracy'].values, name='accuracy RU', secondary_y=True))
+    ln_plt.add(LinePlotInput(x=ru.index, y=ru['speed'].values, name='speed RU', secondary_y=False))
 
-    fig.add_trace(go.Scatter(
-        x=en.index,
-        y=en['speed'].values,
-        mode="lines",
-        name="speed EN",
-    ))
-
-    fig.add_trace(go.Scatter(
-        x=ru.index,
-        y=ru['speed'].values,
-        mode="lines",
-        name="speed RU",
-    ))
-
-    fig.add_trace(go.Scatter(
-        x=ru.index,
-        y=ru['accuracy'].values,
-        mode="lines",
-        name="accuracy RU",
-    ), secondary_y=True)
-
-    graphJSON1 = json.dumps(fig1, cls=plotly.utils.PlotlyJSONEncoder)
-    graphJSON2 = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
-    graphJSON3 = json.dumps(fig3, cls=plotly.utils.PlotlyJSONEncoder)
-    graphJSON4 = json.dumps(fig4, cls=plotly.utils.PlotlyJSONEncoder)
-    graphJSON5 = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    graphJSON1 = fig1.graph_json()
+    graphJSON2 = fig2.graph_json()
+    graphJSON3 = fig3.graph_json()
+    graphJSON4 = fig4.graph_json()
+    graphJSON5 = ln_plt.graph_json()
 
     return render_template('statistics.html',
                            tables1=[df1.to_html(classes='data', header="true", index=False)],
@@ -150,8 +84,7 @@ def statistics():
                            graphJSON2=graphJSON2,
                            graphJSON3=graphJSON3,
                            graphJSON4=graphJSON4,
-                           graphJSON5=graphJSON5
-                           )
+                           graphJSON5=graphJSON5)
 
 
 def start_server():
