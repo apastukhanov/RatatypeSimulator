@@ -23,7 +23,7 @@ class CustomPlot:
         return json.dumps(self.get_fig(), cls=plotly.utils.PlotlyJSONEncoder)
 
 
-class Gauge(CustomPlot):
+class GaugePlot(CustomPlot):
 
     def __init__(self, name, value, delta, gauge, step1, step2, threshold):
         self.name = name
@@ -52,7 +52,7 @@ class Gauge(CustomPlot):
         return fig
 
     def __repr__(self):
-        return f"Gaege({self.name=}, {self.value=}," \
+        return f"GaegePlot({self.name=}, {self.value=}," \
                f" {self.delta=}, {self.gauge=}," \
                f" {self.step1=}, {self.step2=}," \
                f" {self.threshold}"

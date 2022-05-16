@@ -11,22 +11,22 @@ app = Flask(__name__)
 
 @app.route("/start")
 def start():
-    return "<h1>Перенаправляю на стартовую страницу...</h1>"
+    return "<h1> Redirect to the start page...</h1>"
 
 
 @app.route("/mytest")
 def test():
-    return "<h1>Перенаправляю на страницу теста...</h1>"
+    return "<h1> Redirect to the start page...</h1>"
 
 
 @app.route("/openfiledialog/<action>")
 def open_file_dialog(action):
     if action == "import":
-        return "<h1> Импортируем данные...</h1>"
+        return "<h1> Importing data...</h1>"
     if action == "export":
-        return "<h1> Экспортируем данные...</h1>"
+        return "<h1> Exporting data...</h1>"
     if action == "delete":
-        return "<h1> Удаляем данные...</h1>"
+        return "<h1> Deleting data...</h1>"
 
 
 @app.route("/statistics")
@@ -34,24 +34,23 @@ def statistics():
     user = User()
     df = Calculator.read_data()
     df = df.loc[df["user"] == user.get_user()]
-    
+    df['timestamp'] = pd.to_datetime(df['timestamp'], format='%Y-%m-%d %H:%M:%S.%f')
+
     df0 = df.copy()
-    df0['timestamp'] = pd.to_datetime(df0['timestamp'],
-                                      format='%Y-%m-%d %H:%M:%S.%f').dt.strftime('%d %B %Y, %H:%M')
+    df0['timestamp'] = df0['timestamp'].dt.strftime('%d %B %Y, %H:%M')
     
     df1 = df0.sort_values(by='timestamp', ascending=False).reset_index().drop('index', axis=1).head(7)
     df2 = df0.groupby(by="language")[['speed', 'accuracy']].mean()
 
-    fig1 = Gauge(name='speed', value=df2.loc['en', 'speed'],
-                 delta=350, gauge=350, step1=250, step2=400, threshold=490)
-    fig2 = Gauge(name='accuracy', value=df2.loc['en', 'accuracy'],
-                 delta=94, gauge=100, step1=90, step2=100, threshold=95)
-    fig3 = Gauge(name='speed', value=df2.loc['ru', 'speed'],
-                 delta=350, gauge=500, step1=250, step2=400, threshold=490)
-    fig4 = Gauge(name='accuracy', value=df2.loc['ru', 'accuracy'],
-                 delta=94, gauge=100, step1=90, step2=100, threshold=95)
+    fig1 = GaugePlot(name='speed', value=df2.loc['en', 'speed'],
+                     delta=350, gauge=500, step1=300, step2=500, threshold=400)
+    fig2 = GaugePlot(name='accuracy', value=df2.loc['en', 'accuracy'],
+                     delta=95, gauge=100, step1=90, step2=100, threshold=95)
+    fig3 = GaugePlot(name='speed', value=df2.loc['ru', 'speed'],
+                     delta=350, gauge=500, step1=300, step2=500, threshold=400)
+    fig4 = GaugePlot(name='accuracy', value=df2.loc['ru', 'accuracy'],
+                     delta=95, gauge=100, step1=90, step2=100, threshold=95)
 
-    df['timestamp'] = pd.to_datetime(df['timestamp'], format='%Y-%m-%d %H:%M:%S.%f')
     df['timestamp'] = df['timestamp'].dt.strftime('%d.%m.%Y')
 
     en = df.loc[(df['language'] == 'en') &
