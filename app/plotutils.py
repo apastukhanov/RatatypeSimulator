@@ -52,7 +52,7 @@ class GaugePlot(CustomPlot):
         return fig
 
     def __repr__(self):
-        return f"GaegePlot({self.name=}, {self.value=}," \
+        return f"GaugePlot({self.name=}, {self.value=}," \
                f" {self.delta=}, {self.gauge=}," \
                f" {self.step1=}, {self.step2=}," \
                f" {self.threshold}"
