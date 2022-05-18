@@ -2,6 +2,7 @@ from flask import Flask, render_template
 
 from calculator import Calculator
 
+
 app = Flask(__name__)
 
 
