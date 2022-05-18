@@ -1,9 +1,6 @@
-import pandas as pd
 from flask import Flask, render_template
 
 from calculator import Calculator
-from plotutils import *
-from user import User
 
 app = Flask(__name__)
 
