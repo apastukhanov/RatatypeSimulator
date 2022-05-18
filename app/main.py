@@ -12,10 +12,6 @@ from user import User
 from settings import *
 
 
-def on_resized(width, height):
-    print('pywebview window is resized. new dimensions are {width} x {height}'.format(width=width, height=height))
-
-
 def pass_test():
     window.load_url("https://www.ratatype.ua/typing-test/test/en/")
     sleep(2)
@@ -62,12 +58,6 @@ def save_results(content, user):
         """)
 
 
-def open_file_dialog(window):
-    file_types = ('Excel Files (*.csv;*.xlsx;*.xl*)', 'All files (*.*)')
-    result = window.create_file_dialog(webview.OPEN_DIALOG, allow_multiple=True, file_types=file_types)
-    print(result)
-
-
 def on_loaded():
     global user
     url = window.get_current_url()
@@ -93,12 +83,14 @@ def on_loaded():
             if Calculator.import_data_from_csv(result[0]):
                 window.evaluate_js("alert('File is imported!')")
             else:
-                window.evaluate_js("alert('File is corrupted! \n File is not imported')")
+                window.evaluate_js("alert('File is corrupted! File is not imported!')")
         else:
             window.evaluate_js("alert('File is not imported!')")
         window.load_url(START_PAGE)
     if 'export' in url_arr:
-        result = webview.windows[0].create_file_dialog(webview.SAVE_DIALOG, allow_multiple=False)
+        result = webview.windows[0].create_file_dialog(webview.SAVE_DIALOG,
+                                                       save_filename='results.csv',
+                                                       allow_multiple=False)
         if result:
             Calculator.write_to_csv(result)
             window.evaluate_js("alert('File is exported!')")
