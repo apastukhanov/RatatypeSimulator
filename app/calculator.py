@@ -86,13 +86,13 @@ class Calculator:
         df0 = df.groupby(by="language")[['speed', 'accuracy']].mean()
 
         fig1 = GaugePlot(name='speed', value=df0.loc['en', 'speed'],
-                         delta=350, gauge=500, step1=300, step2=500, threshold=400)
-        fig2 = GaugePlot(name='accuracy', value=df0.loc['en', 'accuracy'],
-                         delta=95, gauge=100, step1=90, step2=100, threshold=95)
+                         delta=360, gauge=500, step1=300, step2=500, threshold=360)
+        fig2 = GaugePlot(name='accuracy1', value=df0.loc['en', 'accuracy'],
+                         delta=98, gauge=100, step1=90, step2=100, threshold=98)
         fig3 = GaugePlot(name='speed', value=df0.loc['ru', 'speed'],
-                         delta=350, gauge=500, step1=300, step2=500, threshold=400)
+                         delta=360, gauge=500, step1=300, step2=500, threshold=360)
         fig4 = GaugePlot(name='accuracy', value=df0.loc['ru', 'accuracy'],
-                         delta=95, gauge=100, step1=90, step2=100, threshold=95)
+                         delta=98, gauge=100, step1=90, step2=100, threshold=98)
         fig5 = cls.get_line_plot_fig(df)
 
         figs = [fig1, fig2, fig3, fig4, fig5]

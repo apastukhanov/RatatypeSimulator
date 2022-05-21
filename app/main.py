@@ -78,7 +78,8 @@ def on_loaded():
         save_results(content, user.get_user())
 
     if 'import' in url_arr:
-        result = webview.windows[0].create_file_dialog(webview.OPEN_DIALOG, allow_multiple=False)
+        result = webview.windows[0].create_file_dialog(webview.OPEN_DIALOG,
+                                                       allow_multiple=False)
         if result:
             if Calculator.import_data_from_csv(result[0]):
                 window.evaluate_js("alert('File is imported!')")

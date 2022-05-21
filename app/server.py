@@ -31,7 +31,6 @@ def statistics():
     table1 = Calculator.get_last_entries_html()
     graphJSON1, graphJSON2, graphJSON3, \
         graphJSON4, graphJSON5 = Calculator.get_graphs_json()
-
     return render_template('statistics.html',
                            tables1=table1,
                            graphJSON1=graphJSON1,
