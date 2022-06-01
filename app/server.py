@@ -7,17 +7,17 @@ app = Flask(__name__)
 
 
 @app.route("/start")
-def start():
+def start() -> str:
     return "<h1> Redirect to the start page...</h1>"
 
 
 @app.route("/mytest")
-def test():
+def test() -> str:
     return "<h1> Redirect to the start page...</h1>"
 
 
 @app.route("/openfiledialog/<action>")
-def open_file_dialog(action):
+def open_file_dialog(action) -> str:
     if action == "import":
         return "<h1> Importing data...</h1>"
     if action == "export":
@@ -27,7 +27,7 @@ def open_file_dialog(action):
 
 
 @app.route("/statistics")
-def statistics():
+def statistics() -> str:
     table1 = Calculator.get_last_entries_html()
     graphJSON1, graphJSON2, graphJSON3, \
         graphJSON4, graphJSON5 = Calculator.get_graphs_json()
@@ -40,7 +40,7 @@ def statistics():
                            graphJSON5=graphJSON5)
 
 
-def start_server():
+def start_server() -> None:
     app.run(host="0.0.0.0", port=80)
 
 

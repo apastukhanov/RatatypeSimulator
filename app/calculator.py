@@ -1,17 +1,21 @@
 import os.path
+from typing import List
 from datetime import datetime
 
 import pandas as pd
 
 from settings import *
 from user import User
-from plotutils import GaugePlot, LinePlot, LinePlotInput
+from plotutils import GaugePlot, LinePlot, LinePlotInput, CustomPlot
 
 
 class Calculator:
     COLS = ["timestamp", "speed", "accuracy", "language", "user"]
 
-    def __init__(self, speed, accuracy, lang, user):
+    def __init__(self, speed: int,
+                 accuracy: float,
+                 lang: str,
+                 user: str):
         self.speed = speed
         self.accuracy = accuracy
         self.lang = lang
@@ -25,7 +29,7 @@ class Calculator:
         user = self.user
         return f"Calculator ({speed=}, {accuracy=}, {lang=}, {user=})"
 
-    def save_data(self):
+    def save_data(self) -> None:
         if os.path.exists(PATH_TO_PICKLE):
             df = pd.read_pickle(PATH_TO_PICKLE)
         else:
@@ -40,7 +44,7 @@ class Calculator:
         df.to_pickle(PATH_TO_PICKLE)
 
     @classmethod
-    def read_data(cls, user=None):
+    def read_data(cls, user: str = None) -> pd.DataFrame:
         if os.path.exists(PATH_TO_PICKLE):
             df = pd.read_pickle(PATH_TO_PICKLE)
             df['timestamp'] = pd.to_datetime(df['timestamp'], format='%Y-%m-%d %H:%M:%S.%f')
@@ -50,7 +54,7 @@ class Calculator:
         return pd.DataFrame(columns=cls.COLS)
 
     @classmethod
-    def write_to_csv(cls, path):
+    def write_to_csv(cls, path: str) -> bool:
         df = cls.read_data()
         if path.split('.')[-1] != 'csv':
             path = path + '.csv'
@@ -60,7 +64,7 @@ class Calculator:
         return False
 
     @classmethod
-    def import_data_from_csv(cls, path):
+    def import_data_from_csv(cls, path: str) -> bool:
         if not path.split('.')[-1] == "csv":
             return False
         df = pd.read_csv(path)
@@ -70,17 +74,17 @@ class Calculator:
         return True
 
     @classmethod
-    def get_last_entries_html(cls):
+    def get_last_entries_html(cls) -> List[str]:
         user = User().get_user()
         df = cls.read_data(user)
-        df['timestamp'] = df['timestamp'].dt.strftime('%d %B %Y, %H:%M')
         df = df.sort_values(by='timestamp',
                             ascending=False).reset_index().drop('index',
                                                                 axis=1).head(7)
+        df['timestamp'] = df['timestamp'].dt.strftime('%d %B %Y, %H:%M')
         return [df.to_html(classes='data', header="true", index=False)]
 
     @classmethod
-    def get_graphs_json(cls):
+    def get_graphs_json(cls) -> List[CustomPlot]:
         user = User().get_user()
         df = cls.read_data(user)
         df0 = df.groupby(by="language")[['speed', 'accuracy']].mean()
@@ -103,13 +107,14 @@ class Calculator:
         return figs_json
 
     @classmethod
-    def get_line_plot_fig(cls, df):
-        df['timestamp'] = df['timestamp'].dt.strftime('%d.%m.%Y')
-
+    def get_line_plot_fig(cls, df: pd.DataFrame) -> LinePlot:
         en = df.loc[(df['language'] == 'en')].groupby(
             by=['timestamp'])[['speed', 'accuracy']].mean()
         ru = df.loc[(df['language'] == 'ru')].groupby(
             by=['timestamp'])[['speed', 'accuracy']].mean()
+
+        en.index = en.index.strftime('%d.%m.%Y')
+        ru.index = ru.index.strftime('%d.%m.%Y')
 
         ln_plt = LinePlot()
         ln_plt.add(LinePlotInput(x=en.index, y=en['accuracy'].values,

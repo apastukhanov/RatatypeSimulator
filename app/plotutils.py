@@ -19,7 +19,7 @@ class CustomPlot:
     def git_fig(self):
         pass
 
-    def graph_json(self):
+    def graph_json(self) -> json:
         return json.dumps(self.get_fig(), cls=plotly.utils.PlotlyJSONEncoder)
 
 
@@ -34,7 +34,7 @@ class GaugePlot(CustomPlot):
         self.step2 = step2
         self.threshold = threshold
 
-    def get_fig(self):
+    def get_fig(self) -> go.Figure:
 
         fig = go.Figure(go.Indicator(
             domain={'x': [0, 1], 'y': [0, 1]},
@@ -51,7 +51,7 @@ class GaugePlot(CustomPlot):
 
         return fig
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"GaugePlot({self.name=}, {self.value=}," \
                f" {self.delta=}, {self.gauge=}," \
                f" {self.step1=}, {self.step2=}," \
@@ -63,10 +63,10 @@ class LinePlot(CustomPlot):
     def __init__(self):
         self.lineplots = []
 
-    def add(self, lineplot):
+    def add(self, lineplot: LinePlotInput):
         self.lineplots.append(lineplot)
 
-    def get_fig(self):
+    def get_fig(self) -> go.Figure:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
 
         if self.lineplots:
@@ -78,5 +78,5 @@ class LinePlot(CustomPlot):
 
         return fig
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"LinePlot({self.lineplots=})"

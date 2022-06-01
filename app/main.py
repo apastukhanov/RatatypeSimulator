@@ -12,7 +12,7 @@ from user import User
 from settings import *
 
 
-def pass_test():
+def pass_test() -> None:
     window.load_url("https://www.ratatype.ua/typing-test/test/en/")
     sleep(2)
     keyboard.send("ENTER")
@@ -31,7 +31,7 @@ def pass_test():
             print(str(e))
 
 
-def save_results(content, user):
+def save_results(content: dict, user: str) -> None:
     speed = content[0]["innerText"]
     accuracy = content[1]["innerText"]
     lang = window.get_elements("img.img-responsive")[0]['src'].split('/')[-2]
@@ -58,7 +58,7 @@ def save_results(content, user):
         """)
 
 
-def on_loaded():
+def on_loaded() -> None:
     global user
     url = window.get_current_url()
     url_arr = url.split("/")
